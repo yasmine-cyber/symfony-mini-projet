@@ -1,0 +1,25 @@
+{# templates/evenement/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Événements{% endblock %}
+
+{% block body %}
+    <h1>Liste des Événements</h1>
+
+    {% if evenements is empty %}
+        <p>Aucun événement trouvé.</p>
+    {% else %}
+        <ul>
+            {% for evenement in evenements %}
+                <li>
+                    <strong>{{ evenement.titre }}</strong> – 
+                    {{ evenement.date|date('d/m/Y') }} à {{ evenement.lieu }}
+                    [<a href="{{ path('evenement_show', { id: evenement.id }) }}">Voir</a>]
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{{ path('evenement_new') }}">Créer un nouvel événement</a>
+{% endblock %}
+

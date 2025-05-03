@@ -1,0 +1,18 @@
+{# templates/evenement/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'Événement{% endblock %}
+
+{% block body %}
+    <h1>Détails de l'Événement</h1>
+
+    <ul>
+        <li><strong>Titre :</strong> {{ evenement.titre }}</li>
+        <li><strong>Date :</strong> {{ evenement.date|date('d/m/Y') }}</li>
+        <li><strong>Lieu :</strong> {{ evenement.lieu }}</li>
+        <li><strong>Places disponibles :</strong> {{ evenement.places_disponibles}}</li>
+        <li><strong>Description :</strong> {{ evenement.description }}</li>
+    </ul>
+
+    <a href="{{ path('evenement_new') }}">← Créer un autre événement</a>
+{% endblock %}
