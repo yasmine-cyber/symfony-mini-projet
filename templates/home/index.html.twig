@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - EventManager{% endblock %}
+
+{% block stylesheets %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background:rgb(169, 228, 134);
+        text-align: center;
+        padding: 50px;
+    }
+    h1 {
+        color: #333;
+        margin-bottom: 40px;
+    }
+    .button-container {
+        margin-top: 30px;
+    }
+    .btn {
+        padding: 12px 25px;
+        margin: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #fff;
+        background-color:rgb(216, 224, 151);
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+        background-color:rgb(221, 235, 190);
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue sur la plateforme de gestion des événements</h1> 
+{% endblock %}
+
+{# <div class="button-container">
+        <a href="{{ path('app_login') }}" class="btn">Sign In</a>
+        <a href="{{ path('app_register') }}" class="btn">Sign Up</a>
+    </div> #}
+

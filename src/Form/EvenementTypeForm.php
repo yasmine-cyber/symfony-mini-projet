@@ -29,11 +29,6 @@ class EvenementTypeForm extends AbstractType
             ])
             ->add('places_disponibles', null, [
                 'label' => 'Nombre de places disponibles',
-            ])
-            ->add('organisateur', EntityType::class, [
-                'class' => Organisateur::class,
-                'choice_label' => 'nom', // Change en fonction de la propriété affichable
-                'label' => 'Organisateur',
             ]);
     }
 

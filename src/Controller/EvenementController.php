@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Entity\Organisateur; 
 
 
 
@@ -26,16 +27,16 @@ final class EvenementController extends AbstractController
         $evenement->setPlacesDisponibles(500);
         $evenement->setDescription("Salon international des technologies de demain.");
     
-        // ✅ Validate before saving
+    
         $errors = $validator->validate($evenement);
         if (count($errors) > 0) {
             return new Response((string) $errors, 400);
         }
     
-        // ✅ Persist (prepare for saving)
+
         $em->persist($evenement);
     
-        // ✅ Flush (actually save to DB)
+    
         $em->flush();
     
         return new Response('Événement enregistré avec succès, ID: '.$evenement->getId());
@@ -54,33 +55,63 @@ final class EvenementController extends AbstractController
         ]);
     }
     #[Route('/evenement', name: 'evenement_index')]
-    public function index(EvenementRepository $evenementRepository): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
-        $evenements = $evenementRepository->findAll();
-
+        $page = max(1, $request->query->getInt('page', 1)); 
+        $limit = 5; 
+        $offset = ($page - 1) * $limit;
+    
+    
+        $query = $em->createQuery(
+            'SELECT e FROM App\Entity\Evenement e ORDER BY e.date DESC'
+        )
+        ->setFirstResult($offset)
+        ->setMaxResults($limit);
+    
+        $evenements = $query->getResult();
+    
+    
+        $total = $em->createQuery(
+            'SELECT COUNT(e.id) FROM App\Entity\Evenement e'
+        )->getSingleScalarResult();
+    
+        $totalPages = ceil($total / $limit);
+    
         return $this->render('evenement/index.html.twig', [
             'evenements' => $evenements,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
-
-    #[Route('/evenement/new', name: 'evenement_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    #[Route('/evenement/generate', name: 'evenement_generate')]
+public function generate(EntityManagerInterface $em): Response
+{
+    for ($i = 1; $i <= 23; $i++) {
         $evenement = new Evenement();
-        $form = $this->createForm(EvenementTypeForm::class, $evenement);
+        $evenement->setTitre("Événement $i");
+        $evenement->setDate(new \DateTime("+$i days"));
+        $evenement->setLieu("Lieu $i");
+        $evenement->setDescription("Description de l'événement numéro $i.");
+        $evenement->setPlacesDisponibles(100);
 
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($evenement);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('evenement_success'); // À créer ou adapter
+        $organisateur = $em->getRepository(Organisateur::class)->find(1);
+        if (!$organisateur) {
+            dd('Organisateur non trouvé');
+        } else {
+            dd($organisateur);
         }
+        $evenement->setOrganisateur($organisateur);
 
-        return $this->render('evenement/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
+    
+
+        $em->persist($evenement);
     }
+
+    $em->flush();
+
+    return new Response('23 événements générés avec succès.');
+}
+
 
     }
