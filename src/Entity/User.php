@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'discr', type: 'string')]
 #[ORM\DiscriminatorMap([
-    'user' => 'User',
     'admin' => 'Admin',
     'organisateur' => 'Organisateur',
     'participant' => 'Participant'
@@ -33,9 +32,10 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message: "L'email n'est pas valide")]
     private ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le mot de passe est requis")]
     private ?string $password = null;
+
 
     #[ORM\Column(length: 20, nullable: true)]
     #[Assert\Regex(
@@ -95,8 +95,22 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        $discr = $this->getDiscr();
+        $roleMap = [
+            'participant' => 'ROLE_PARTICIPANT',
+            'organisateur' => 'ROLE_ORGANISATEUR',
+            'admin' => 'ROLE_ADMIN',
+        ];
+
+        $roles = ['ROLE_USER'];
+        if (isset($roleMap[$discr])) {
+            $roles[] = $roleMap[$discr];
+        }
+
+        return array_unique($roles);
     }
+
+    abstract protected function getDiscr(): string;
 
     public function eraseCredentials(): void
     {

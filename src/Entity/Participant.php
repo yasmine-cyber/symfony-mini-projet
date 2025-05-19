@@ -18,13 +18,13 @@ class Participant extends User
         $this->reservations = new ArrayCollection();
     }
 
-    public function getRoles(): array
+    protected function getDiscr(): string
     {
-        return ['ROLE_PARTICIPANT'];
+        return 'participant';
     }
+
     public function eraseCredentials(): void
     {
-        // Implémentation vide ou appel au parent
         parent::eraseCredentials();
     }
 
@@ -49,7 +49,6 @@ class Participant extends User
     public function removeReservation(Reservation $reservation): static
     {
         if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
             if ($reservation->getParticipant() === $this) {
                 $reservation->setParticipant(null);
             }

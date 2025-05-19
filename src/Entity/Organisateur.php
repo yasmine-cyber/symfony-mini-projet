@@ -18,13 +18,13 @@ class Organisateur extends User
         $this->evenements = new ArrayCollection();
     }
 
-    public function getRoles(): array
+    protected function getDiscr(): string
     {
-        return ['ROLE_ORGANISATEUR'];
+        return 'organisateur'; // or 'admin' for Admin.php
     }
+
     public function eraseCredentials(): void
     {
-        // Implémentation vide ou appel au parent
         parent::eraseCredentials();
     }
 
@@ -49,7 +49,6 @@ class Organisateur extends User
     public function removeEvenement(Evenement $evenement): static
     {
         if ($this->evenements->removeElement($evenement)) {
-            // set the owning side to null (unless already changed)
             if ($evenement->getOrganisateur() === $this) {
                 $evenement->setOrganisateur(null);
             }

@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
+use App\Repository\EvenementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class ParticipantController extends AbstractController
+class ParticipantController extends AbstractController
 {
-    #[Route('/participant', name: 'app_participant')]
-    public function index(): Response
+    #[Route('/evenements', name: 'evenement_index')]
+    public function index(EvenementRepository $evenementRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_PARTICIPANT');
+        $evenements = $evenementRepository->findAll();
+
         return $this->render('participant/index.html.twig', [
-            'controller_name' => 'ParticipantController',
+            'evenements' => $evenements,
         ]);
     }
 }

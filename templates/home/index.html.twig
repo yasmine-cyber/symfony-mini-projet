@@ -6,7 +6,7 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background:rgb(169, 228, 134);
+        background: rgb(169, 228, 134);
         text-align: center;
         padding: 50px;
     }
@@ -25,22 +25,37 @@
         border-radius: 5px;
         cursor: pointer;
         color: #fff;
-        background-color:rgb(216, 224, 151);
+        background-color: rgb(216, 224, 151);
         text-decoration: none;
         transition: background-color 0.3s ease;
     }
     .btn:hover {
-        background-color:rgb(221, 235, 190);
+        background-color: rgb(221, 235, 190);
+    }
+    .user-info {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #333;
     }
 </style>
 {% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur la plateforme de gestion des événements</h1> 
+    <h1>Bienvenue sur la plateforme de gestion des événements</h1>
+
+    {% if app.user %}
+        <div class="user-info">
+            Connecté en tant que {{ app.user.email }} 
+            (<a href="{{ path('app_logout') }}" class="btn">Déconnexion</a>)
+        </div>
+    {% else %}
+        <div class="button-container">
+            <a href="{{ path('app_login') }}" class="btn">Sign In</a>
+            {# <a href="{{ path('app_register') }}" class="btn">Sign Up</a> #}
+        </div>
+    {% endif %}
+
+    <div class="button-container">
+        <a href="{{ path('evenement_index') }}" class="btn">Voir les événements</a>
+    </div>
 {% endblock %}
-
-{# <div class="button-container">
-        <a href="{{ path('app_login') }}" class="btn">Sign In</a>
-        <a href="{{ path('app_register') }}" class="btn">Sign Up</a>
-    </div> #}
-

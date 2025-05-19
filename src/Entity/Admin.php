@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\AdminRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: AdminRepository::class)]
 class Admin extends User
 {
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $role_specifique = null;
 
     public function getRoleSpecifique(): ?string
@@ -21,20 +22,9 @@ class Admin extends User
         return $this;
     }
 
-    public function getRoles(): array
+    protected function getDiscr(): string
     {
-        $roles = parent::getRoles();
-        $roles[] = 'ROLE_ADMIN';
-        
-        if ($this->role_specifique) {
-            $roles[] = $this->role_specifique;
-        }
-        
-        return array_unique($roles);
+        return 'admin';
     }
-    public function eraseCredentials(): void
-    {
-        // Implémentation vide car le parent (User) gère déjà cette méthode
-        parent::eraseCredentials();
-    }
+    
 }
