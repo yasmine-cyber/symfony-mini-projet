@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <h1>Inscription</h1>
+    {% if app.flashes('success') %}
+        <div class="alert alert-success">
+            {% for message in app.flashes('success') %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {{ form_start(registrationForm) }}
+    {{ form_widget(registrationForm) }}
+
+    {% if registrationForm.vars.errors|length > 0 %}
+        <div class="alert alert-danger">
+            {% for error in registrationForm.vars.errors %}
+                <div>{{ error.message }}</div>
+            {% endfor %}
+        </div>
+        {# Additional debugging output for each field #}
+        <pre>{{ dump(registrationForm.vars.errors) }}</pre>
+    {% endif %}
+
+    <button type="submit">S'inscrire</button>
+{{ form_end(registrationForm) }}
+
+    <p>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
+{% endblock %}
+

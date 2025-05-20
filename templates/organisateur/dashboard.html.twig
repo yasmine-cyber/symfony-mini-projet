@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Événements{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Mes Événements</h1>
+
+        <a href="{{ path('organisateur_new') }}" class="btn btn-primary mb-3">Ajouter un événement</a>
+
+        {% if evenements is empty %}
+            <p>Aucun événement pour l’instant.</p>
+        {% else %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Date</th>
+                        <th>Lieu</th>
+                        <th>Places disponibles</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evenement in evenements %}
+                        <tr>
+                            <td>{{ evenement.titre }}</td>
+                            <td>{{ evenement.date|date('d/m/Y H:i') }}</td>
+                            <td>{{ evenement.lieu }}</td>
+                            <td>{{ evenement.placesDisponibles }}</td>
+                            <td>
+                                <a href="{{ path('organisateur_edit', { id: evenement.id }) }}" class="btn btn-sm btn-warning">Modifier</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+{# 
+<a href="{{ path('organisateur_evenement_delete', { id: evenement.id }) }}" 
+   class="btn btn-sm btn-danger"
+   onclick="return confirm('Voulez-vous vraiment supprimer cet événement ?');">
+   Supprimer
+</a> 
+#}

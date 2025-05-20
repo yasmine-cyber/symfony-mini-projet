@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des événements{% endblock %}
+
+{% block body %}
+    <h1>Événements</h1>
+
+    <ul>
+        {% for evenement in evenements %}
+            <li>
+                <strong>{{ evenement.titre }}</strong><br>
+                📍 {{ evenement.lieu }}<br>
+                📅 {{ evenement.date|date('d/m/Y') }}<br>
+                📝 {{ evenement.description }}<br>
+                🧍‍♂️ Places disponibles : {{ evenement.getPlacesRestantes() }}
+                <hr>
+            </li>
+        {% else %}
+            <li>Aucun événement trouvé.</li>
+        {% endfor %}
+    </ul>
+
+    <div class="pagination">
+        {% if currentPage > 1 %}
+            <a href="{{ path('evenement_index', { page: currentPage - 1 }) }}">⬅️ Précédent</a>
+        {% endif %}
+
+        Page {{ currentPage }} sur {{ totalPages }}
+
+        {% if currentPage < totalPages %}
+            <a href="{{ path('evenement_index', { page: currentPage + 1 }) }}">Suivant ➡️</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+
+

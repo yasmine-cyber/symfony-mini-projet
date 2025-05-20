@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - EventManager{% endblock %}
+
+{# Supprime le CSS ici car il est maintenant dans style.css #}
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue sur la plateforme de gestion des événements</h1>
+
+    {% if app.user %}
+        <div class="user-info">
+            Connecté en tant que {{ app.user.email }} 
+            (<a href="{{ path('app_logout') }}" class="btn">Déconnexion</a>)
+        </div>
+    {% else %}
+        <div class="button-container">
+            <a href="{{ path('app_login') }}" class="btn">Sign In</a>
+            {# <a href="{{ path('app_register') }}" class="btn">Sign Up</a> #}
+        </div>
+    {% endif %}
+
+    <div class="button-container">
+        <a href="{{ path('evenement_index') }}" class="btn">Voir les événements</a>
+    </div>
+{% endblock %}

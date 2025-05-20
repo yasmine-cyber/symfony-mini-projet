@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Événement créé{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-success">✅ Événement créé avec succès !</h1>
+
+        <p>Votre événement a bien été enregistré.</p>
+
+        <a href="{{ path('evenement_index') }}" class="btn btn-primary mt-3">
+            Retour à la liste des événements
+        </a>
+    </div>
+{% endblock %}
